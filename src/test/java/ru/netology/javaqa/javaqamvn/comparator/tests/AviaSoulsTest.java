@@ -7,7 +7,6 @@ import ru.netology.javaqa.javaqamvn.comparator.Ticket;
 import ru.netology.javaqa.javaqamvn.comparator.TicketTimeComparator;
 
 import java.util.Arrays;
-import java.util.Comparator;
 
 public class AviaSoulsTest {
 
@@ -40,6 +39,62 @@ public class AviaSoulsTest {
         int actual = ticket1.compareTo(ticket2);
         Assertions.assertEquals(expected, actual);
     }
+
+    @Test
+    public void shouldSearchWithNoTicketsFound() {
+        AviaSouls manager = new AviaSouls();
+        Ticket ticket1 = new Ticket("London", "Saint-Petersburg", 5000, 18, 20);
+        Ticket ticket2 = new Ticket("Glazgo", "Saint-Petersburg", 4000, 20, 22);
+        Ticket ticket3 = new Ticket("Jupiter", "Saint-Petersburg", 5000, 18, 20);
+        Ticket ticket4 = new Ticket("Mars", "Saint-Petersburg", 4000, 20, 22);
+
+        manager.add(ticket1);
+        manager.add(ticket2);
+        manager.add(ticket3);
+        manager.add(ticket4);
+
+        Ticket[] expected = {};
+        Ticket[] actual = manager.search("Moscow", "Saint-Petersburg");
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldSearchWithOneTicketFound() {
+        Ticket ticket1 = new Ticket("Moscow", "Saint-Petersburg", 5000, 18, 20);
+        Ticket ticket2 = new Ticket("Glazgo", "Saint-Petersburg", 18000, 20, 24);
+        Ticket ticket3 = new Ticket("Jupiter", "Saint-Petersburg", 500_000, 1, 23);
+        Ticket ticket4 = new Ticket("Mars", "Saint-Petersburg", 4_000_000, 2, 22);
+
+        AviaSouls manager = new AviaSouls();
+        manager.add(ticket1);
+        manager.add(ticket2);
+        manager.add(ticket3);
+        manager.add(ticket4);
+        Ticket[] expected = {ticket1};
+        Ticket[] actual = manager.search("Moscow", "Saint-Petersburg");
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldSearchWithTwoTicketsFound() {
+        Ticket ticket1 = new Ticket("Moscow", "Saint-Petersburg", 5000, 18, 20);
+        Ticket ticket2 = new Ticket("Glazgo", "Saint-Petersburg", 18000, 20, 24);
+        Ticket ticket3 = new Ticket("Jupiter", "Saint-Petersburg", 500_000, 1, 23);
+        Ticket ticket4 = new Ticket("Mars", "Saint-Petersburg", 4_000_000, 2, 22);
+        Ticket ticket5 = new Ticket("Glazgo", "Saint-Petersburg", 23000, 18, 21);
+
+        AviaSouls manager = new AviaSouls();
+        manager.add(ticket1);
+        manager.add(ticket2);
+        manager.add(ticket3);
+        manager.add(ticket4);
+        manager.add(ticket5);
+        Ticket[] expected = {ticket2, ticket5};
+        Ticket[] actual = manager.search("Glazgo", "Saint-Petersburg");
+        Assertions.assertArrayEquals(expected, actual);
+
+    }
+
 
     @Test
     public void shouldSearchAndSortByPrice() {
